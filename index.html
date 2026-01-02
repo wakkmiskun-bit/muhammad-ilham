@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#06b6d4">
+    <meta name="description" content="FastCopy - Layanan fotocopy profesional dengan harga terjangkau. Kualitas terbaik untuk kebutuhan dokumen Anda.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FastCopy">
+    
+    <title>FastCopy | Toko Fotocopy Profesional</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23000' width='180' height='180'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='90' fill='%2306b6d4' font-weight='bold' font-family='Arial'>FC</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23000' width='180' height='180' rx='40'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='90' fill='%2306b6d4' font-weight='bold' font-family='Arial'>FC</text></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="bg-black text-gray-100 min-h-screen">
+
+    <!-- Welcome Animation -->
+    <div id="welcomeAnimation" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[100] welcome-fade-out">
+        <div class="text-center">
+            <div class="welcome-bounce mb-6">
+                <i class="fas fa-copy text-6xl text-cyan-400"></i>
+            </div>
+            <h1 class="text-5xl font-bold text-white mb-4 welcome-slide-up">FastCopy</h1>
+            <p class="text-xl text-cyan-300 welcome-slide-up-delay">Layanan Fotocopy Cepat dan Berkualitas</p>
+        </div>
+    </div>
+
+        <!-- Rainbow Top Border -->
+        <div class="h-1 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 sticky top-0 z-50"></div>
+
+    <header class="bg-black shadow-xl sticky top-0 z-40 border-b border-gray-800">
+        <div class="container mx-auto px-4 py-3 md:py-4 flex items-center gap-3 md:gap-6">
+            <div class="text-2xl md:text-3xl font-extrabold cursor-pointer transition duration-300 hover:scale-105 flex items-center gap-2" onclick="showHome()">
+                <i class="fas fa-copy text-cyan-400"></i>
+                <span class="bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-300 bg-clip-text text-transparent">FASTCOPY</span>
+            </div>
+
+            <div class="flex-1 relative hidden md:block">
+                <div class="flex border-2 border-blue-400 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-200 bg-gray-900">
+                    <input type="text" placeholder="Cari layanan fotocopy..." class="w-full px-4 py-2 outline-none bg-gray-900 text-white placeholder-gray-500">
+                    <button class="bg-gradient-to-r from-blue-400 to-cyan-400 text-black px-6 hover:from-blue-500 hover:to-cyan-500 transition duration-200 font-semibold">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3 md:space-x-5 text-gray-400">
+                <div class="cursor-pointer hover:text-blue-400 text-center transition duration-200 transform hover:scale-110">
+                    <i class="fa fa-shopping-cart text-lg md:text-xl"></i>
+                    <p class="text-[10px] hidden md:block">Keranjang</p>
+                </div>
+                <div class="h-6 md:h-8 w-[1px] bg-blue-400 hidden md:block"></div>
+                <!-- Dark Mode Toggle -->
+                <button id="darkModeToggle" class="font-bold text-gray-400 hover:text-yellow-400 transition duration-200 text-lg md:text-base" title="Toggle Dark/Light Mode" onclick="toggleDarkMode()">
+                    <i class="fas fa-moon" id="darkModeIcon"></i>
+                </button>
+                <div class="h-6 md:h-8 w-[1px] bg-blue-400 hidden md:block"></div>
+                <button class="font-bold text-gray-400 hover:text-blue-400 transition duration-200 text-sm md:text-base" onclick="openQueueForm()">
+                    <i class="fas fa-list mr-1 md:mr-2"></i><span class="hidden md:inline">Pesan Sekarang</span><span class="md:hidden">Pesan</span>
+                </button>
+                <!-- Install PWA Button (Android/Mobile) -->
+                <button id="installPWA" class="hidden md:block font-bold bg-cyan-500 hover:bg-cyan-600 text-black px-3 py-2 rounded-lg transition duration-200 text-sm" title="Install FastCopy App">
+                    <i class="fas fa-download mr-1"></i><span class="hidden lg:inline">Install App</span><span class="lg:hidden">App</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar -->
+        <div class="md:hidden container mx-auto px-4 pb-3">
+            <div class="flex border-2 border-blue-400 rounded-lg overflow-hidden shadow-sm bg-gray-900">
+                <input type="text" placeholder="Cari layanan..." class="w-full px-3 py-2 outline-none bg-gray-900 text-white placeholder-gray-500 text-sm">
+                <button class="bg-gradient-to-r from-blue-400 to-cyan-400 text-black px-4 hover:from-blue-500 hover:to-cyan-500 transition duration-200 font-semibold">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Welcome Section dengan Banner Gambar -->
+    <div id="welcomeSection" class="relative h-64 md:h-80 mb-6 shadow-2xl overflow-hidden rounded-lg">
+        <!-- Rainbow Top Border -->
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 z-20"></div>
+
+        <!-- Background Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/80 to-black/90 z-10"></div>
+
+        <!-- Banner Image -->
+        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=400&fit=crop" alt="Fotocopy Profesional" class="w-full h-full object-cover">
+
+        <!-- Content -->
+        <div class="absolute inset-0 flex items-center justify-center z-20 px-4">
+            <div class="text-center animate-fade-in">
+                <div class="mb-4">
+                    <i class="fas fa-copy text-cyan-400 text-4xl md:text-6xl drop-shadow-lg"></i>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg">Selamat Datang di FastCopy</h2>
+                <p class="text-lg md:text-xl text-cyan-300 mb-6 drop-shadow-lg px-2">Layanan Fotocopy Profesional Dengan Harga Terjangkau</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
+                    <button onclick="showCategory('produk')" class="bg-gradient-to-r from-blue-400 to-cyan-400 text-black px-6 md:px-8 py-3 rounded-lg font-bold hover:from-blue-500 hover:to-cyan-500 transition duration-200 shadow-lg transform hover:scale-105 flex items-center justify-center gap-2 text-sm md:text-base">
+                        <i class="fas fa-copy"></i> Lihat Layanan
+                    </button>
+                    <button onclick="openQueueForm()" class="bg-white text-black px-6 md:px-8 py-3 rounded-lg font-bold hover:bg-gray-200 transition duration-200 shadow-lg transform hover:scale-105 flex items-center justify-center gap-2 text-sm md:text-base">
+                        <i class="fas fa-hourglass-end"></i> Pesan Sekarang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main id="homePage" class="container mx-auto px-4 py-4 md:py-6">
+        <div class="flex flex-col lg:flex-row gap-4 lg:gap-6">
+            <!-- Sidebar Kategori -->
+            <aside class="w-full lg:w-1/4 hidden lg:block bg-gray-900 rounded-lg shadow-lg border border-gray-800 overflow-hidden h-fit">
+                <div class="bg-gradient-to-r from-blue-500 to-cyan-400 p-4 font-bold text-black shadow-md flex items-center gap-2">
+                    <i class="fas fa-list"></i> KATEGORI
+                </div>
+                <ul class="text-sm text-gray-400">
+                    <li class="category-item p-4 hover:bg-gray-800 hover:text-cyan-400 cursor-pointer border-b border-gray-800 transition duration-200 flex justify-between items-center group" onclick="showCategory('antrian')">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-hourglass-end text-cyan-400"></i>
+                            <span>Antrian</span>
+                        </div>
+                        <i class="fa fa-chevron-right text-[10px] mt-1 group-hover:translate-x-1 transition"></i>
+                    </li>
+                    <li class="category-item p-4 hover:bg-gray-800 hover:text-cyan-400 cursor-pointer transition duration-200 flex justify-between items-center group" onclick="showCategory('produk')">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-copy text-cyan-400"></i>
+                            <span>Layanan</span>
+                        </div>
+                        <i class="fa fa-chevron-right text-[10px] mt-1 group-hover:translate-x-1 transition"></i>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="flex-1">
+                <!-- Kategori Mobile -->
+                <div class="lg:hidden mb-4 flex gap-2">
+                    <button onclick="showCategory('antrian')" class="flex-1 bg-gradient-to-r from-blue-400 to-cyan-400 text-black py-2 rounded-lg font-bold hover:from-blue-500 hover:to-cyan-500 transition duration-200 flex items-center justify-center gap-2 text-sm">
+                        <i class="fas fa-hourglass-end"></i>Antrian
+                    </button>
+                    <button onclick="showCategory('produk')" class="flex-1 bg-gradient-to-r from-blue-400 to-cyan-400 text-black py-2 rounded-lg font-bold hover:from-blue-500 hover:to-cyan-500 transition duration-200 flex items-center justify-center gap-2 text-sm">
+                        <i class="fas fa-copy"></i>Layanan
+                    </button>
+                </div>
+
+                <!-- Konten Produk -->
+                <div id="productSection" class="block">
+                    <h2 class="text-xl md:text-2xl font-bold mb-4 md:mb-6 flex items-center text-white">
+                        <span class="w-1.5 h-8 md:h-10 bg-gradient-to-b from-blue-400 to-cyan-400 mr-3 md:mr-4 rounded-full shadow-md"></span>
+                        <i class="fas fa-copy text-cyan-400 mr-2 md:mr-3"></i>Semua Layanan Fotocopy
+                    </h2>
+
+                    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                    </div>
+                </div>
+
+                <!-- Konten Antrian -->
+                <div id="queueSection" class="hidden">
+                    <h2 class="text-xl md:text-2xl font-bold mb-4 md:mb-6 flex items-center text-white">
+                        <span class="w-1.5 h-8 md:h-10 bg-gradient-to-b from-blue-400 to-cyan-400 mr-3 md:mr-4 rounded-full shadow-md"></span>
+                        <i class="fas fa-hourglass-end text-cyan-400 mr-2 md:mr-3"></i>Daftar Antrian
+                    </h2>
+
+                    <div class="mb-4 flex justify-center sm:justify-end">
+                        <button onclick="exportWhatsAppNumbers()" class="bg-gradient-to-r from-green-400 to-green-500 text-black px-4 md:px-6 py-2 rounded-lg font-bold hover:from-green-500 hover:to-green-600 transition duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center gap-2 text-sm md:text-base">
+                            <i class="fas fa-download"></i> <span class="hidden sm:inline">Export Nomor WhatsApp</span><span class="sm:hidden">Export</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-gray-900 rounded-lg shadow-lg border border-gray-800 p-4 md:p-6">
+                        <div id="queueList" class="space-y-3">
+                            <p class="text-center text-gray-500 py-8">Belum ada pesanan di antrian</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Detail Product Page -->
+    <main id="detailPage" class="container mx-auto px-4 py-6 hidden">
+        <button onclick="showHome()" class="text-cyan-400 mb-6 hover:text-cyan-300 transition duration-200 text-sm font-semibold flex items-center gap-2">
+            <i class="fa fa-arrow-left"></i> Kembali ke Beranda
+        </button>
+        <div id="detailContent"></div>
+    </main>
+
+    <!-- Modal Login/Pendaftaran WhatsApp -->
+    <div id="queueModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 p-2 md:p-4">
+        <div class="bg-gray-900 rounded-lg shadow-2xl max-w-md w-full mx-2 md:mx-0 p-4 md:p-6 border border-blue-400 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fas fa-sign-in-alt text-cyan-400 text-xl md:text-2xl"></i> Masuk / Daftar
+                </h2>
+                <button onclick="closeQueueModal()" class="text-gray-500 hover:text-white text-xl md:text-2xl">&times;</button>
+            </div>
+            <p class="text-sm text-gray-400 mb-4">Masuk dengan WhatsApp Anda untuk melanjutkan</p>
+
+            <form id="queueForm" onsubmit="submitQueue(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-cyan-300 mb-1">Nama Lengkap</label>
+                    <input type="text" id="queueName" required class="w-full px-3 py-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-800 text-white placeholder-gray-500 text-sm md:text-base">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-cyan-300 mb-1">Nomor WhatsApp</label>
+                    <input type="tel" id="queuePhone" required class="w-full px-3 py-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-800 text-white placeholder-gray-500 text-sm md:text-base" placeholder="628123456789">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-cyan-300 mb-1">Email</label>
+                    <input type="email" id="queueEmail" required class="w-full px-3 py-2 border border-blue-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-800 text-white placeholder-gray-500 text-sm md:text-base" placeholder="email@example.com">
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 mt-6">
+                    <button type="button" onclick="closeQueueModal()" class="flex-1 px-4 py-2 border border-blue-400 text-blue-400 rounded-lg font-semibold hover:bg-gray-800 transition duration-200 text-sm md:text-base">Batal</button>
+                    <button type="submit" class="flex-1 px-4 py-2 bg-gradient-to-r from-green-400 to-emerald-400 text-black rounded-lg font-semibold hover:from-green-500 hover:to-emerald-500 transition duration-200 flex items-center justify-center gap-2 text-sm md:text-base">
+                        <i class="fab fa-whatsapp"></i> Masuk
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Pembayaran QRIS -->
+    <div id="paymentModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-gray-900 rounded-lg shadow-2xl max-w-md w-full p-6 border border-blue-400">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fas fa-qrcode text-cyan-400 text-2xl"></i> Pembayaran QRIS
+                </h2>
+                <button onclick="closePaymentModal()" class="text-gray-500 hover:text-white text-2xl">&times;</button>
+            </div>
+            <p class="text-sm text-gray-400 mb-4">Scan QR Code di bawah untuk menyelesaikan pembayaran</p>
+            
+            <div class="bg-white p-6 rounded-lg flex items-center justify-center mb-6">
+                <div id="qrCodeContainer">
+                    <img id="qrCodeImage" src="" alt="QR Code QRIS" class="w-full">
+                </div>
+            </div>
+
+            <div class="bg-gray-800 border border-cyan-400 p-4 rounded-lg mb-4">
+                <p class="text-sm text-gray-400">Nominal Pembayaran</p>
+                <p class="text-2xl font-bold text-cyan-400" id="paymentAmount">Rp 0</p>
+            </div>
+
+            <div class="space-y-2 mb-6">
+                <p class="text-xs text-gray-500">Atas Nama: <span id="paymentName" class="text-white font-bold"></span></p>
+                <p class="text-xs text-gray-500">Email: <span id="paymentEmail" class="text-white font-bold"></span></p>
+            </div>
+
+            <div class="flex gap-3">
+                <button onclick="closePaymentModal()" class="flex-1 px-4 py-2 border border-blue-400 text-blue-400 rounded-lg font-semibold hover:bg-gray-800 transition duration-200">Batal</button>
+                <button onclick="confirmPayment()" class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-400 to-cyan-400 text-black rounded-lg font-semibold hover:from-blue-500 hover:to-cyan-500 transition duration-200 flex items-center justify-center gap-2">
+                    <i class="fas fa-check"></i> Verifikasi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review & Rating Modal -->
+    <div id="reviewModal" class="modal fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+        <div class="modal-content bg-gray-900 border-2 border-blue-400 rounded-lg shadow-2xl max-w-2xl w-full mx-4 p-6 max-h-[90vh] overflow-y-auto">
+            <!-- Close Button -->
+            <button onclick="closeReviewModal()" class="float-right text-gray-400 hover:text-red-400 text-2xl">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <h2 class="text-2xl font-bold text-white mb-2">
+                <i class="fas fa-star text-yellow-400"></i> Rating & Ulasan
+            </h2>
+            <p class="text-gray-400 text-sm mb-6">Bagikan pengalaman Anda menggunakan layanan FastCopy</p>
+
+            <!-- Star Rating Input -->
+            <div class="mb-6">
+                <label class="block text-gray-300 font-bold mb-3">Berapa rating untuk FastCopy?</label>
+                <div class="flex gap-2 text-3xl" id="starRating">
+                    <i class="fas fa-star text-gray-600 cursor-pointer hover:text-yellow-400 transition" onclick="setRating(1)" data-rating="1"></i>
+                    <i class="fas fa-star text-gray-600 cursor-pointer hover:text-yellow-400 transition" onclick="setRating(2)" data-rating="2"></i>
+                    <i class="fas fa-star text-gray-600 cursor-pointer hover:text-yellow-400 transition" onclick="setRating(3)" data-rating="3"></i>
+                    <i class="fas fa-star text-gray-600 cursor-pointer hover:text-yellow-400 transition" onclick="setRating(4)" data-rating="4"></i>
+                    <i class="fas fa-star text-gray-600 cursor-pointer hover:text-yellow-400 transition" onclick="setRating(5)" data-rating="5"></i>
+                </div>
+                <p id="ratingText" class="text-gray-400 text-sm mt-2">Pilih rating (1-5 bintang)</p>
+            </div>
+
+            <!-- Review Text -->
+            <div class="mb-6">
+                <label class="block text-gray-300 font-bold mb-2">Tulis Ulasan Anda</label>
+                <textarea id="reviewText" placeholder="Bagikan pengalaman Anda... (minimal 10 karakter)" class="w-full bg-gray-800 border border-gray-700 text-white p-3 rounded-lg focus:border-cyan-400 outline-none resize-none" rows="4"></textarea>
+                <p class="text-xs text-gray-500 mt-1"><span id="charCount">0</span>/300 karakter</p>
+            </div>
+
+            <!-- Name Input -->
+            <div class="mb-6">
+                <label class="block text-gray-300 font-bold mb-2">Nama Anda</label>
+                <input type="text" id="reviewName" placeholder="Masukkan nama Anda" class="w-full bg-gray-800 border border-gray-700 text-white p-3 rounded-lg focus:border-cyan-400 outline-none">
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-3">
+                <button onclick="closeReviewModal()" class="flex-1 px-4 py-2 border border-gray-600 text-gray-400 rounded-lg font-semibold hover:bg-gray-800 transition duration-200">Batal</button>
+                <button onclick="submitReview()" class="flex-1 px-4 py-2 bg-gradient-to-r from-blue-400 to-cyan-400 text-black rounded-lg font-semibold hover:from-blue-500 hover:to-cyan-500 transition duration-200 flex items-center justify-center gap-2">
+                    <i class="fas fa-paper-plane"></i> Kirim Ulasan
+                </button>
+            </div>
+
+            <!-- Reviews List -->
+            <div class="mt-8 pt-6 border-t border-gray-700">
+                <h3 class="text-xl font-bold text-white mb-4">Ulasan dari Pelanggan</h3>
+                <div id="reviewsList" class="space-y-4">
+                    <!-- Reviews akan muncul di sini -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Button -->
+    <button onclick="openReviewModal()" class="fixed bottom-24 right-6 bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-black p-4 rounded-full shadow-lg transition duration-200 transform hover:scale-110 z-40 flex items-center justify-center font-bold" title="Lihat Ulasan">
+        <i class="fas fa-star text-2xl"></i>
+    </button>
+
+    <!-- Floating Button -->
+    <button onclick="openQueueForm()" class="fixed bottom-6 right-6 bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-500 hover:to-cyan-500 text-black p-4 rounded-full shadow-lg transition duration-200 transform hover:scale-110 z-40 flex items-center justify-center font-bold" title="Pesan Sekarang">
+        <i class="fas fa-plus text-2xl"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800 border-t-4 border-t-blue-400 mt-16 pt-12 pb-6">
+        <!-- Rainbow Top Border -->
+        <div class="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500"></div>
+
+        <div class="container mx-auto px-4">
+            <!-- Main Footer Content -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <!-- Brand Info -->
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fas fa-copy text-cyan-400 text-2xl"></i>
+                        <h3 class="text-xl font-bold text-white">FastCopy</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Toko fotocopy profesional yang melayani kebutuhan cetak dokumen Anda dengan kualitas terbaik dan harga terjangkau.
+                    </p>
+                    <!-- Social Media -->
+                    <div class="flex gap-3 mt-4">
+                        <a href="#" class="bg-gray-800 hover:bg-blue-400 text-blue-400 hover:text-black w-10 h-10 rounded-full flex items-center justify-center transition duration-200">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-blue-400 text-blue-400 hover:text-black w-10 h-10 rounded-full flex items-center justify-center transition duration-200">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-blue-400 text-blue-400 hover:text-black w-10 h-10 rounded-full flex items-center justify-center transition duration-200">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="#" onclick="showHome()" class="hover:text-blue-400 transition duration-200">🏠 Home</a></li>
+                        <li><a href="#" onclick="showCategory('produk')" class="hover:text-blue-400 transition duration-200">📋 Layanan</a></li>
+                        <li><a href="#" onclick="showCategory('antrian')" class="hover:text-blue-400 transition duration-200">⏱️ Antrian</a></li>
+                        <li><a href="#" onclick="openQueueForm()" class="hover:text-blue-400 transition duration-200">📝 Pesan Sekarang</a></li>
+                    </ul>
+                </div>
+
+                <!-- Layanan -->
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">Layanan Kami</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li>📄 Fotocopy B&W</li>
+                        <li>🌈 Fotocopy Warna</li>
+                        <li>🖨️ Cetak Dokumen</li>
+                        <li>📑 Jilid & Laminating</li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">Hubungi Kami</h4>
+                    <div class="space-y-3 text-gray-400 text-sm">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-map-marker-alt text-blue-400 mt-1"></i>
+                            <div>
+                                <p class="font-semibold text-white">Lokasi</p>
+                                <p>Jl. Merdeka No.123<br>Jakarta, Indonesia</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-phone text-blue-400"></i>
+                            <div>
+                                <p class="font-semibold text-white">Telepon</p>
+                                <p>+62 812 3456 7890</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-envelope text-blue-400"></i>
+                            <div>
+                                <p class="font-semibold text-white">Email</p>
+                                <p>info@fastcopy.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">
+                    © 2024 FastCopy. Semua hak dilindungi.
+                </p>
+                <p class="text-gray-500 text-sm">
+                    Powered by <span class="text-blue-400 font-bold">FastCopy Technology</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    
+    <!-- Register Service Worker untuk PWA -->
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(registration => {
+                        console.log('✅ Service Worker registered:', registration);
+                    })
+                    .catch(error => {
+                        console.log('❌ Service Worker registration failed:', error);
+                    });
+            });
+        }
+
+        // Prompt Install PWA on Android
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallPrompt();
+        });
+
+        function showInstallPrompt() {
+            const installButton = document.getElementById('installPWA');
+            if (installButton) {
+                installButton.style.display = 'block';
+                installButton.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        console.log(`User response to the install prompt: ${outcome}`);
+                        deferredPrompt = null;
+                        installButton.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        // Deteksi jika app sudah ter-install
+        window.addEventListener('appinstalled', () => {
+            console.log('✅ PWA berhasil di-install!');
+            const installButton = document.getElementById('installPWA');
+            if (installButton) {
+                installButton.style.display = 'none';
+            }
+        });
+
+        // Share API untuk Android
+        function shareOrder(orderData) {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'FastCopy Order',
+                    text: `Saya memesan di FastCopy: ${orderData}`,
+                    url: window.location.href
+                }).catch(err => console.log('Share failed:', err));
+            }
+        }
+    </script>
+</body>
+</html>

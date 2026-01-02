@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastCopy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-black text-gray-100 min-h-screen">
+
+<!-- HEADER -->
+<header class="bg-black border-b border-gray-800 sticky top-0 z-40">
+    <div class="container mx-auto px-4 py-4 flex items-center gap-4">
+        <h1 class="text-2xl font-bold text-cyan-400">FASTCOPY</h1>
+
+        <!-- SEARCH (HILANG DI MOBILE) -->
+        <div class="flex-1 hidden md:block">
+            <input type="text" placeholder="Cari layanan..." class="w-full px-4 py-2 bg-gray-900 border border-cyan-400 rounded-lg">
+        </div>
+
+        <button onclick="openQueueForm()" class="bg-cyan-400 text-black px-4 py-2 rounded-lg font-bold">
+            Pesan
+        </button>
+    </div>
+</header>
+
+<!-- MAIN -->
+<main class="container mx-auto px-4 py-6">
+    <h2 class="text-xl font-bold mb-4">Layanan</h2>
+    <div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+</main>
+
+<!-- MODAL DAFTAR -->
+<div id="queueModal" class="fixed inset-0 bg-black/70 hidden flex justify-center z-50">
+    <div class="bg-gray-900 w-full h-full md:h-auto md:max-w-md p-6 overflow-y-auto border border-cyan-400">
+        <h2 class="text-xl font-bold mb-4">Daftar</h2>
+
+        <form id="queueForm" onsubmit="submitQueue(event)" class="space-y-3">
+            <input id="queueName" required placeholder="Nama Lengkap" class="w-full px-3 py-2 bg-gray-800 border border-cyan-400 rounded">
+            <input id="queuePhone" required placeholder="628xxxx" class="w-full px-3 py-2 bg-gray-800 border border-cyan-400 rounded">
+            <input id="queueEmail" required placeholder="email@gmail.com" class="w-full px-3 py-2 bg-gray-800 border border-cyan-400 rounded">
+
+            <button class="w-full bg-green-400 text-black py-2 rounded font-bold">
+                Masuk WhatsApp
+            </button>
+        </form>
+
+        <button onclick="closeQueueModal()" class="w-full mt-3 border border-cyan-400 py-2 rounded">
+            Batal
+        </button>
+    </div>
+</div>
+
+<!-- MODAL PEMBAYARAN -->
+<div id="paymentModal" class="fixed inset-0 bg-black/70 hidden flex justify-center z-50">
+    <div class="bg-gray-900 w-full h-full md:h-auto md:max-w-md p-6 overflow-y-auto border border-cyan-400">
+        <h2 class="text-xl font-bold mb-4">Pembayaran</h2>
+
+        <p class="text-cyan-400 text-lg font-bold mb-3" id="paymentAmount">Rp 50.000</p>
+
+        <button onclick="confirmPayment()" class="w-full bg-cyan-400 text-black py-3 rounded font-bold">
+            Verifikasi
+        </button>
+
+        <button onclick="closePaymentModal()" class="w-full mt-3 border border-cyan-400 py-2 rounded">
+            Batal
+        </button>
+    </div>
+</div>
+
